@@ -130,13 +130,13 @@ open class JZWeekViewFlowLayout: UICollectionViewFlowLayout {
     }
     
     // MARK: - UICollectionViewLayout
-    override open func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {
+    @objc override open func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {
         invalidateLayoutCache()
         prepare()
         super.prepare(forCollectionViewUpdates: updateItems)
     }
     
-    override open func finalizeCollectionViewUpdates() {
+    @objc override open func finalizeCollectionViewUpdates() {
         for subview in collectionView!.subviews {
             for decorationViewClass in registeredDecorationClasses.values {
                 if subview.isKind(of: decorationViewClass) {
@@ -153,12 +153,12 @@ open class JZWeekViewFlowLayout: UICollectionViewFlowLayout {
         }
     }
     
-    override open func register(_ viewClass: AnyClass?, forDecorationViewOfKind elementKind: String) {
+    @objc override open func register(_ viewClass: AnyClass?, forDecorationViewOfKind elementKind: String) {
         super.register(viewClass, forDecorationViewOfKind: elementKind)
         registeredDecorationClasses[elementKind] = viewClass
     }
     
-    override open func prepare() {
+    @objc override open func prepare() {
         super.prepare()
         
         if needsToPopulateAttributesForAllSections {
@@ -186,7 +186,7 @@ open class JZWeekViewFlowLayout: UICollectionViewFlowLayout {
         }
     }
     
-    open func prepareHorizontalTileSectionLayoutForSections(_ sectionIndexes: NSIndexSet) {
+    @objc open func prepareHorizontalTileSectionLayoutForSections(_ sectionIndexes: NSIndexSet) {
         guard collectionView!.numberOfSections != 0 else { return }
         var attributes =  UICollectionViewLayoutAttributes()
         
@@ -394,17 +394,17 @@ open class JZWeekViewFlowLayout: UICollectionViewFlowLayout {
         return _gridlineIndex
     }
     
-    override open var collectionViewContentSize: CGSize {
+    @objc override open var collectionViewContentSize: CGSize {
         return CGSize(width: rowHeaderWidth + sectionWidth * CGFloat(collectionView!.numberOfSections),
                       height: maxSectionHeight)
     }
     
     // MARK: - Layout
-    override open func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+    @objc override open func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
         return itemAttributes[indexPath]
     }
     
-    override open func layoutAttributesForSupplementaryView(ofKind elementKind: String, at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+    @objc override open func layoutAttributesForSupplementaryView(ofKind elementKind: String, at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
         switch elementKind {
         case JZSupplementaryViewKinds.columnHeader:
             return columnHeaderAttributes[indexPath]
@@ -421,7 +421,7 @@ open class JZWeekViewFlowLayout: UICollectionViewFlowLayout {
         }
     }
     
-    override open func layoutAttributesForDecorationView(ofKind elementKind: String, at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+    @objc override open func layoutAttributesForDecorationView(ofKind elementKind: String, at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
         switch elementKind {
         case JZDecorationViewKinds.verticalGridline:
             return verticalGridlineAttributes[indexPath]
@@ -492,7 +492,7 @@ open class JZWeekViewFlowLayout: UICollectionViewFlowLayout {
     }
     
     /// Adjust items size when overlapping at same period
-    open func adjustItemsForOverlap(_ sectionItemAttributes: [UICollectionViewLayoutAttributes], inSection: Int, sectionMinX: CGFloat, currentSectionZ: Int) {
+    @objc open func adjustItemsForOverlap(_ sectionItemAttributes: [UICollectionViewLayoutAttributes], inSection: Int, sectionMinX: CGFloat, currentSectionZ: Int) {
         var adjustedAttributes = Set<UICollectionViewLayoutAttributes>()
         
         var sectionZ = currentSectionZ
@@ -605,7 +605,7 @@ open class JZWeekViewFlowLayout: UICollectionViewFlowLayout {
         allDayCornerAttributes.removeAll()
     }
     
-    override open func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
+    @objc override open func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         let visibleSections = NSMutableIndexSet()
         NSIndexSet(indexesIn: NSRange(location: 0, length: collectionView!.numberOfSections))
             .enumerate(_:) { (section: Int, stop: UnsafeMutablePointer<ObjCBool>) -> Void in
@@ -619,12 +619,12 @@ open class JZWeekViewFlowLayout: UICollectionViewFlowLayout {
         return allAttributes.filter({ rect.intersects($0.frame) })
     }
     
-    override open func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
+    @objc override open func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
         return true
     }
     
     // MARK: - Section sizing
-    open func rectForSection(_ section: Int) -> CGRect {
+    @objc open func rectForSection(_ section: Int) -> CGRect {
         return CGRect(x: rowHeaderWidth + sectionWidth * CGFloat(section), y: 0,
                       width: sectionWidth, height: collectionViewContentSize.height)
     }
@@ -673,26 +673,26 @@ open class JZWeekViewFlowLayout: UICollectionViewFlowLayout {
     
     /// Vertically scroll the collectionView to specific time in a day, only **hour** will be calulated for the offset.
     /// If the hour you set is too large, it will only reach the bottom 24:00 as the maximum value.
-    open func scrollCollectionViewTo(time: Date) {
+    @objc open func scrollCollectionViewTo(time: Date) {
         let y = max(0, min(CGFloat(Calendar.current.component(.hour, from: time)) * hourHeight,
                            collectionView!.contentSize.height - collectionView!.frame.height))
         
         self.collectionView!.setContentOffsetWithoutDelegate(CGPoint(x: self.collectionView!.contentOffset.x, y: y), animated: false)
     }
     
-    open func timeForRowHeader(at indexPath: IndexPath) -> Date {
+    @objc open func timeForRowHeader(at indexPath: IndexPath) -> Date {
         var components = daysForSection(indexPath.section)
         components.hour = indexPath.item
         return Calendar.current.date(from: components)!
     }
     
-    open func dateForColumnHeader(at indexPath: IndexPath) -> Date {
+    @objc open func dateForColumnHeader(at indexPath: IndexPath) -> Date {
         let day = delegate?.collectionView(collectionView!, layout: self, dayForSection: indexPath.section)
         return Calendar.current.startOfDay(for: day!)
     }
    
     // MARK: - z index
-    open func zIndexForElementKind(_ kind: String) -> Int {
+    @objc open func zIndexForElementKind(_ kind: String) -> Int {
         switch kind {
         case JZSupplementaryViewKinds.cornerHeader, JZDecorationViewKinds.allDayCorner:
             return minOverlayZ + 10

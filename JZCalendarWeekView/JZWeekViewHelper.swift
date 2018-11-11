@@ -24,7 +24,7 @@ public enum JZDecorationViewKinds {
     public static let horizontalGridline = "HorizontalGridline"
 }
 
-enum ScrollDirection {
+@objc enum ScrollDirection : Int{
     case none
     case crazy
     case left
@@ -35,7 +35,7 @@ enum ScrollDirection {
     case vertical
 }
 
-public enum JZHourGridDivision: Int {
+@objc public enum JZHourGridDivision: Int {
     case noneDiv = 0
     case minutes_5 = 5
     case minutes_10 = 10
@@ -44,17 +44,17 @@ public enum JZHourGridDivision: Int {
     case minutes_30 = 30
 }
 
-public enum DayOfWeek: Int {
+@objc public enum DayOfWeek: Int {
     case Sunday = 1, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
 }
 
-public enum JZScrollType {
+@objc public enum JZScrollType: Int {
     case pageScroll
     case sectionScroll
     //TODO: - infiniteScroll
 }
 
-public enum JZCurrentTimelineType {
+@objc public enum JZCurrentTimelineType: Int {
     case section // Display the current time line only in today's section
     case page // Display the current time line in the whole page including today
 }
