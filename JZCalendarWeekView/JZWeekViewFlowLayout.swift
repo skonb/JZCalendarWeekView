@@ -30,7 +30,7 @@ open class JZWeekViewFlowLayout: UICollectionViewFlowLayout {
     
     open var defaultHourHeight: CGFloat { return 50 }
     open var defaultRowHeaderWidth: CGFloat { return 42 }
-    open var defaultColumnHeaderHeight: CGFloat { return 44 }
+    open var defaultColumnHeaderHeight: CGFloat { return 0 }
     open var defaultHourGridDivision: JZHourGridDivision { return .noneDiv }
     // You can change following constants
     open var defaultGridThickness: CGFloat { return 0.5 }
@@ -268,31 +268,31 @@ open class JZWeekViewFlowLayout: UICollectionViewFlowLayout {
                                   size: CGSize(width: rowHeaderWidth, height: allDayHeaderHeight))
         attributes.zIndex = zIndexForElementKind(JZDecorationViewKinds.allDayCorner)
         
-//        // column header background
-//        (attributes, columnHeaderBackgroundAttributes) = layoutAttributesForDecorationView(at: IndexPath(item: 0, section: 0),
-//                                                                                           ofKind: JZDecorationViewKinds.columnHeaderBackground,
-//                                                                                           withItemCache: columnHeaderBackgroundAttributes)
-//        let attributesHeight = columnHeaderHeight + (collectionView!.contentOffset.y < 0 ? abs(collectionView!.contentOffset.y) : 0 )
-//        attributes.frame = CGRect(origin: collectionView!.contentOffset, size: CGSize(width: collectionView!.frame.width, height: attributesHeight))
-//        attributes.zIndex = zIndexForElementKind(JZDecorationViewKinds.columnHeaderBackground)
-//        
+        // column header background
+        (attributes, columnHeaderBackgroundAttributes) = layoutAttributesForDecorationView(at: IndexPath(item: 0, section: 0),
+                                                                                           ofKind: JZDecorationViewKinds.columnHeaderBackground,
+                                                                                           withItemCache: columnHeaderBackgroundAttributes)
+        let attributesHeight = columnHeaderHeight + (collectionView!.contentOffset.y < 0 ? abs(collectionView!.contentOffset.y) : 0 )
+        attributes.frame = CGRect(origin: collectionView!.contentOffset, size: CGSize(width: collectionView!.frame.width, height: attributesHeight))
+        attributes.zIndex = zIndexForElementKind(JZDecorationViewKinds.columnHeaderBackground)
         
-//        // Column Header
-//        let columnHeaderMinY = fmax(collectionView!.contentOffset.y, 0.0)
-//
-//        sectionIndexes.enumerate(_:) { (section, stop) in
-//            let sectionMinX = calendarContentMinX + sectionWidth * CGFloat(section)
+        
+        // Column Header
+        let columnHeaderMinY = fmax(collectionView!.contentOffset.y, 0.0)
+
+        sectionIndexes.enumerate(_:) { (section, stop) in
+            let sectionMinX = calendarContentMinX + sectionWidth * CGFloat(section)
 //            (attributes, columnHeaderAttributes) = layoutAttributesForSupplemantaryView(at: IndexPath(item: 0, section: section),
 //                                                                                        ofKind: JZSupplementaryViewKinds.columnHeader,
 //                                                                                        withItemCache: columnHeaderAttributes)
 //            attributes.frame = CGRect(x: sectionMinX, y: columnHeaderMinY, width: sectionWidth, height: columnHeaderHeight)
 //            attributes.zIndex = zIndexForElementKind(JZSupplementaryViewKinds.columnHeader)
-//
-//            layoutVerticalGridLinesAttributes(section: section, sectionX: sectionMinX, calendarGridMinY: calendarGridMinY, sectionHeight: sectionHeight)
-//            layoutItemsAttributes(section: section, sectionX: sectionMinX, calendarStartY: calendarGridMinY)
-//        }
-//
-//        layoutHorizontalGridLinesAttributes(calendarStartX: calendarContentMinX, calendarStartY: calendarContentMinY)
+
+            layoutVerticalGridLinesAttributes(section: section, sectionX: sectionMinX, calendarGridMinY: calendarGridMinY, sectionHeight: sectionHeight)
+            layoutItemsAttributes(section: section, sectionX: sectionMinX, calendarStartY: calendarGridMinY)
+        }
+
+        layoutHorizontalGridLinesAttributes(calendarStartX: calendarContentMinX, calendarStartY: calendarContentMinY)
     }
     
     // MARK: - Layout Attributes
